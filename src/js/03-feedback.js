@@ -4,25 +4,20 @@ import storage from './localStorage';
 // localStorage
 const STORAGE_KEY = 'feedback-form-state';
 
-// object form
-const refs = {
-  form: document.querySelector('form'),
-  eMail: document.querySelector('input'),
-  message: document.querySelector('textarea'),
-};
-
-console.log(refs);
+// set form
+const form = document.querySelector('form');
 
 // set event listener
-refs.form.addEventListener('input', throttle(onIput, 500));
+form.addEventListener('input', throttle(onIput, 500));
 
-refs.form.addEventListener('submit', onFormSubmit);
+form.addEventListener('submit', onFormSubmit);
 
 // clean form when submit information
-
 function onFormSubmit(event) {
   event.preventDefault();
-  console.log(refs.eMail.value, refs.message.value);
+  const email = event.target.elements.email.value;
+  const message = event.target.elements.message.value;
+  console.log(email, message);
   event.currentTarget.reset();
   localStorage.removeItem(STORAGE_KEY);
 }
@@ -36,13 +31,13 @@ function onIput(event) {
 
 // get not saved information
 
-function outPut() {
+function outPut(form) {
   const savedFormData = storage.load(STORAGE_KEY);
 
   if (savedFormData) {
-    refs.eMail.value = savedFormData.email || '';
-    refs.message.value = savedFormData.message || '';
+    form.elements.email.value = savedFormData.email || '';
+    form.elements.message.value = savedFormData.message || '';
   }
 }
 
-outPut();
+outPut(form);
